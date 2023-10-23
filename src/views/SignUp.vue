@@ -82,7 +82,8 @@ export default {
                 })
 
                 console.log(response)
-
+                this.$socket.emit('signup',response.data.user)
+                this.$router.push('/signin')
             } catch (error) {
                 Toast.fire({
                     icon: "error",

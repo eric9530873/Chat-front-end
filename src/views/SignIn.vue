@@ -40,6 +40,7 @@
 import { Toast } from '../utils/helpers';
 import authorization from '../apis/authorization'
 
+
 export default {
     data() {
         return {
@@ -62,9 +63,16 @@ export default {
                     email: this.email,
                     password: this.password
                 });
+                if (response.data.status !== 'success') {
+                    throw new Error(response.data.message)
+                }
                 console.log(response);
+
                 localStorage.setItem('token', response.data.data.token)
-                this.$router.push('/resumes')
+
+                this.$store.commit('setCurrentUser', response.data.data.user)
+                this.$socket.emit('signin', response.data.data.user)
+                this.$router.push('/homepage')
             }
             catch (error) {
                 this.password = "";
